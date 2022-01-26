@@ -5,7 +5,19 @@ const SECURITY_CODE = '123';
 const UseReducer = (props) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
-    cons
+    const onConfirm = () => dispatch({type: actionTypes.confirm});
+    const onError = () => dispatch({type: actionTypes.error});
+    const onCheck = () => dispatch({type: actionTypes.check});
+    const onDelete = () => dispatch({type: actionTypes.delete});
+    const onReset = () => dispatch({type: actionTypes.reset});
+    
+    const onWrite = (e) => {
+        dispatch({
+            type: actionTypes.write,
+            payload: e.target.value,
+        });
+    };
+   
 
     React.useEffect(() =>{
 
@@ -14,16 +26,10 @@ const UseReducer = (props) => {
             setTimeout(() => {
                 console.log('validando...');
                 if(state.value === SECURITY_CODE){
-
-                    dispatch({
-                        type: actionTypes.confirm
-                    });
+                    onConfirm();
 
                 }else{
-                    
-                    dispatch({
-                        type: actionTypes.error
-                    });
+                    onError();
                 }
 
             }, 2000);
@@ -46,15 +52,11 @@ const UseReducer = (props) => {
                     placeholder='Código de seguridad' 
                     type="text"
                     value={state.value}
-                    onChange={(e) => {
-                        dispatch({type: actionTypes.write, payload: e.target.value});
-                }}
+                    onChange={onWrite}
                 />
 
                 <button 
-                    onClick={() => {
-                        dispatch({type: actionTypes.check});
-                    }}
+                    onClick={onCheck}
                     >
                         Comprobar
                 </button>
@@ -65,17 +67,14 @@ const UseReducer = (props) => {
             <>
                 <p>Estado confirmacion. ¿Estas seguro?</p>
                 <button 
-                    onClick={()=>{
-                        dispatch({type: actionTypes.delete});
-                    }}
+                    onClick={onDelete}
                 >
                         Si, eliminar
                 </button>
 
                 <button 
-                    onClick={()=>{
-                        dispatch({type: actionTypes.reset});
-                    }}
+                    onClick={onReset}  
+                    
                 >
                         No, volver
                 </button>
@@ -90,7 +89,7 @@ const UseReducer = (props) => {
                 <p>Eliminado con exito!</p>
                 <button 
                     onClick={()=>{
-                        dispatch({type: actionTypes.reset});
+                        onReset();
                     }}
                 >
                         Resetear, volver atrás
